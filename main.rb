@@ -17,22 +17,38 @@ Dir.mkdir(folder_path)
 
 
 #download each file
-puts "listing up the #{ENV['name']} bucket"
+puts "listing up the #{s3_conf[:bucket_name]} bucket"
 bucket = AWS::S3::Bucket.find(s3_conf[:bucket_name])
 
 if bucket.size==0
-  puts "Empty"
+  puts "Bucket is empty"
   return
 else
-  puts "Backing up #{bucket.size} files"
+  puts "Bucket contains atleast #{bucket.size()} files"
 end
 
 start_time = Time.now
-bucket.each do |entry|
-  File.open(File.join(folder_path, entry.key), "w+"){|file|
-    file << entry.value
-  }
+marker = false
+count = 0
+
+while true
+  new_object_list = bucket.objects(:max_keys => 100, :marker => (marker.key rescue "0"))
+  break if new_object_list.empty?
+  
+  puts "loading next #{new_object_list.length} : (#{marker.key rescue "No Marker"})"
+
+  new_object_list.each do |entry|
+    File.open(File.join(folder_path, entry.key), "w+"){|file|
+      file << entry.value
+    }
+    count += 1
+  end
+  
+  marker = new_object_list.last
+  
+  puts count
 end
+
 end_time = Time.now
 
-puts " - finished in #{end_time-start_time} seconds"
+puts " - finished #{count} files in #{end_time-start_time} seconds"
