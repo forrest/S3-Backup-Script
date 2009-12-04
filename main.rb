@@ -18,17 +18,17 @@ Dir.mkdir(folder_path)
 
 #download each file
 puts "listing up the #{ENV['name']} bucket"
-entries = AWS::S3::Bucket.find(s3_conf[:bucket_name]).entries
+bucket = AWS::S3::Bucket.find(s3_conf[:bucket_name])
 
-if entries.empty?
+if bucket.size==0
   puts "Empty"
   return
 else
-  puts "Backing up #{entries.length} files"
+  puts "Backing up #{bucket.size} files"
 end
 
 start_time = Time.now
-entries.each do |entry|
+bucket.each do |entry|
   File.open(File.join(folder_path, entry.key), "w+"){|file|
     file << entry.value
   }
