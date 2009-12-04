@@ -1,0 +1,11 @@
+development:
+  access_key_id: '14DVED89Z0NPEWE3QER2'
+  secret_access_key: '9MWmZ/nJX+QmVtFlSZq12sx5vl5rh/gCcOUqcF/q'
+  use_ssl: false #set it to true or false
+  bucket_name: 'smibs_development'
+
+production:
+  access_key_id: 'ACCEE_KEY'
+  secret_access_key: 'SECRET_KEY'
+  use_ssl: false
+  bucket_name: 'smibs_production'
