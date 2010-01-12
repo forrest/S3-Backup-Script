@@ -2,7 +2,7 @@
 require(File.join(File.dirname(__FILE__), 'config', 'environment.rb'))
 
 #open connection to s3
-s3_conf = YAML.load_file('config/s3_keys.yml')[ENV["mode"]].symbolize_keys
+s3_conf = YAML.load_file(RAILS_ROOT+'/config/s3_keys.yml')[ENV["mode"]].symbolize_keys
 conn = AWS::S3::Base.establish_connection!(:access_key_id => s3_conf[:access_key_id], :secret_access_key => s3_conf[:secret_access_key])
 if not conn
   puts "failed to connect to s3"
@@ -35,7 +35,7 @@ while true
   new_object_list = bucket.objects(:max_keys => 100, :marker => (marker.key rescue "0"))
   break if new_object_list.empty?
   
-  puts "loading next #{new_object_list.length} : (#{marker.key rescue "No Marker"})"
+  puts "loading next #{new_object_list.length} files : (#{marker.key rescue "No Marker"})"
 
   new_object_list.each do |entry|
     File.open(File.join(folder_path, entry.key), "w+"){|file|
