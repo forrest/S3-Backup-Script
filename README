@@ -1,0 +1,17 @@
+S3 Backup Solution====
+
+
+This was a simple script I threw together at Smibs (www.smibs.com) to make offsite backups of our S3 buckets. We have this script run once a week on an offsite computer to make copies of the entire bucket.
+
+
+Usage:
+  Start by setting the path to your archive in the environment.rb file. Then add something like this to your crontab file.
+  
+  @weekly /<path-to-script>/main.rb production
+
+
+TODO:
+
+- Move Archive folder path to a config file.
+- Add a maximum number of local copies to store.
+- Tar old copies to save space and make it easier to work with.

@@ -10,7 +10,7 @@ if not conn
 end
 
 #make folder
-archive_folder = File.join(RAILS_ROOT, "..", "archive")
+archive_folder = ARCHIVE_ROOT
 folder_name = Time.now.to_i.to_s
 folder_path = File.join(archive_folder, folder_name)
 Dir.mkdir(folder_path)
@@ -27,10 +27,11 @@ else
   puts "Bucket contains atleast #{bucket.size()} files"
 end
 
+#the bucket will only grab 1000 files at a time. That is why I keep track of my
+#count with a marker and grab the files in groups of 1000
 start_time = Time.now
 marker = false
 count = 0
-
 while true
   new_object_list = bucket.objects(:max_keys => 100, :marker => (marker.key rescue "0"))
   break if new_object_list.empty?
@@ -48,7 +49,5 @@ while true
   
   puts count
 end
-
-end_time = Time.now
 
 puts " - finished #{count} files in #{end_time-start_time} seconds"
