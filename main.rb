@@ -27,8 +27,8 @@ else
   puts "Bucket contains atleast #{bucket.size()} files"
 end
 
-#the bucket will only grab 1000 files at a time. That is why I keep track of my
-#count with a marker and grab the files in groups of 1000
+#A bucket can only grab 1000 files at a time. That is why I keep track of my
+#count with a marker and grab the files in groups of 100.
 start_time = Time.now
 marker = false
 count = 0
@@ -50,4 +50,4 @@ while true
   puts count
 end
 
-puts " - finished #{count} files in #{end_time-start_time} seconds"
+puts " - finished #{count} files in #{Time.now-start_time} seconds"
